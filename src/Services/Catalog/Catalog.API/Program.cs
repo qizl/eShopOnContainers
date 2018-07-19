@@ -14,18 +14,18 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API
         public static void Main(string[] args)
         {
             BuildWebHost(args)
-                .MigrateDbContext<CatalogContext>((context,services)=>
+                .MigrateDbContext<CatalogContext>((context, services) =>
                 {
                     var env = services.GetService<IHostingEnvironment>();
                     var settings = services.GetService<IOptions<CatalogSettings>>();
                     var logger = services.GetService<ILogger<CatalogContextSeed>>();
 
                     new CatalogContextSeed()
-                    .SeedAsync(context,env,settings,logger)
+                    .SeedAsync(context, env, settings, logger)
                     .Wait();
 
                 })
-                .MigrateDbContext<IntegrationEventLogContext>((_,__)=> { })
+                .MigrateDbContext<IntegrationEventLogContext>((_, __) => { })
                 .Run();
         }
 
@@ -45,7 +45,7 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API
                     builder.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
                     builder.AddConsole();
                     builder.AddDebug();
-                })                
-                .Build();    
+                })
+                .Build();
     }
 }
