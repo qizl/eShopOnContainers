@@ -1,4 +1,7 @@
-﻿using Autofac;
+﻿using System;
+using System.Data.Common;
+using System.Reflection;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using global::Catalog.API.Infrastructure.Filters;
 using global::Catalog.API.IntegrationEvents;
@@ -26,9 +29,6 @@ using Microsoft.Extensions.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
-using System;
-using System.Data.Common;
-using System.Reflection;
 
 namespace Microsoft.eShopOnContainers.Services.Catalog.API
 {
