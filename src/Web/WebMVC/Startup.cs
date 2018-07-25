@@ -1,4 +1,7 @@
-﻿using Microsoft.ApplicationInsights.Extensibility;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.ServiceFabric;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -15,9 +18,6 @@ using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Extensions.Http;
 using StackExchange.Redis;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http;
 using WebMVC.Infrastructure;
 using WebMVC.Infrastructure.Middlewares;
 using WebMVC.Services;

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace WebMVC.Infrastructure
+﻿namespace WebMVC.Infrastructure
 {
     public static class API
     {

@@ -80,7 +80,7 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.Controllers
         [HttpGet]
         [Route("items/{id:int}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(CatalogItem),(int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(CatalogItem), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetItemById(int id)
         {
             if (id <= 0)
