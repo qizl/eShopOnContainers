@@ -1,21 +1,23 @@
 ﻿{
-  "ConnectionString": "Server=tcp:127.0.0.1,5433;Database=Microsoft.eShopOnContainers.Services.OrderingDb;User Id=sa;Password=Pass@word;",
-  "IdentityUrl": "http://localhost:5105",
-  "UseCustomizationData": false,
-  "Logging": {
-    "IncludeScopes": false,
-    "LogLevel": {
-      "Default": "Trace",
-      "System": "Information",
-      "Microsoft": "Information"
-    }
-  },
-  "AzureServiceBusEnabled": false,
-  "SubscriptionClientName": "Ordering",
-  "CheckUpdateTime": "30000",
-  "ApplicationInsights": {
-    "InstrumentationKey": ""
-  },
-  "EventBusRetryCount": 5,
-  "EventBusConnection": "localhost"
+    "ConnectionString": "Server=192.168.1.104;Database=Microsoft.eShopOnContainers.Services.OrderingDb;User Id=sa;Password=qizl'sqlserverA123;",
+    "IdentityUrl": "http://localhost:5105",
+    "UseCustomizationData": false,
+    "Logging": {
+        "IncludeScopes": false,
+        "LogLevel": {
+            "Default": "Trace",
+            "System": "Information",
+            "Microsoft": "Information"
+        }
+    },
+    "AzureServiceBusEnabled": false,
+    "SubscriptionClientName": "Ordering",
+    "CheckUpdateTime": "30000",
+    "ApplicationInsights": {
+        "InstrumentationKey": ""
+    },
+    "EventBusConnection": "192.168.1.104", // rabbitmq
+    "EventBusUserName": "qizl",
+    "EventBusPassword": "qizl123",
+    "EventBusRetryCount": 5
 }

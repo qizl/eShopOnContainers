@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Reflection;
+using Autofac;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
 using Microsoft.eShopOnContainers.Services.Ordering.API.Application.Commands;
 using Microsoft.eShopOnContainers.Services.Ordering.API.Application.Queries;
@@ -6,13 +7,11 @@ using Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.Buyer
 using Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
 using Microsoft.eShopOnContainers.Services.Ordering.Infrastructure.Idempotency;
 using Microsoft.eShopOnContainers.Services.Ordering.Infrastructure.Repositories;
-using System.Reflection;
 
 namespace Microsoft.eShopOnContainers.Services.Ordering.API.Infrastructure.AutofacModules
 {
 
-    public class ApplicationModule
-        :Autofac.Module
+    public class ApplicationModule : Autofac.Module
     {
 
         public string QueriesConnectionString { get; }

@@ -1,14 +1,14 @@
 namespace Microsoft.eShopOnContainers.Services.Marketing.API.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.eShopOnContainers.Services.Marketing.API.Dto;
     using Microsoft.eShopOnContainers.Services.Marketing.API.Infrastructure;
     using Microsoft.eShopOnContainers.Services.Marketing.API.Model;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Threading.Tasks;
 
     [Authorize]
     public class LocationsController : Controller

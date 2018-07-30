@@ -1,5 +1,10 @@
 ﻿namespace Microsoft.eShopOnContainers.Services.Marketing.API
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.Reflection;
+    using System.Threading.Tasks;
     using AspNetCore.Builder;
     using AspNetCore.Hosting;
     using AspNetCore.Http;
@@ -28,11 +33,6 @@
     using Microsoft.eShopOnContainers.Services.Marketing.API.Infrastructure.Middlewares;
     using RabbitMQ.Client;
     using Swashbuckle.AspNetCore.Swagger;
-    using System;
-    using System.Collections.Generic;
-    using System.IdentityModel.Tokens.Jwt;
-    using System.Reflection;
-    using System.Threading.Tasks;
 
     public class Startup
     {

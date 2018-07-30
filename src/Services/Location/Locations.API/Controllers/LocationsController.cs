@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Net;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.eShopOnContainers.Services.Locations.API.Infrastructure.Services;
 using Microsoft.eShopOnContainers.Services.Locations.API.Model;
 using Microsoft.eShopOnContainers.Services.Locations.API.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
 
 namespace Locations.API.Controllers
 {

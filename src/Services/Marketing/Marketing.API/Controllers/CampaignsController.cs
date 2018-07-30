@@ -3,20 +3,19 @@
 namespace Microsoft.eShopOnContainers.Services.Marketing.API.Controllers
 {
     using System;
-    using System.Linq;
     using System.Collections.Generic;
-    using Infrastructure.Repositories;
-    using AspNetCore.Mvc;
-    using Infrastructure;
-    using System.Threading.Tasks;
-    using Model;
-    using EntityFrameworkCore;
-    using Dto;
-    using AspNetCore.Authorization;
-    using Extensions.Options;
-    using Microsoft.eShopOnContainers.Services.Marketing.API.ViewModel;
-    using Microsoft.AspNetCore.Http;
+    using System.Linq;
     using System.Net;
+    using System.Threading.Tasks;
+    using AspNetCore.Authorization;
+    using AspNetCore.Mvc;
+    using Dto;
+    using EntityFrameworkCore;
+    using Extensions.Options;
+    using Infrastructure;
+    using Infrastructure.Repositories;
+    using Microsoft.eShopOnContainers.Services.Marketing.API.ViewModel;
+    using Model;
 
     [Route("api/v1/[controller]")]
     [Authorize]

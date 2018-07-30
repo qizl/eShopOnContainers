@@ -1,13 +1,13 @@
-﻿using Basket.API.IntegrationEvents.Events;
+﻿using System;
+using System.Net;
+using System.Threading.Tasks;
+using Basket.API.IntegrationEvents.Events;
 using Basket.API.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
 using Microsoft.eShopOnContainers.Services.Basket.API.Model;
 using Microsoft.eShopOnContainers.Services.Basket.API.Services;
-using System;
-using System.Net;
-using System.Threading.Tasks;
 
 namespace Microsoft.eShopOnContainers.Services.Basket.API.Controllers
 {
