@@ -23,19 +23,19 @@ namespace OcelotApiGw
                     .AddJsonFile("configuration.json", false, false)
                     .AddEnvironmentVariables();
                 })
-                .ConfigureServices(s =>
-                {
-                    s.AddOcelot();
-                })
-                .ConfigureLogging((hostingContext, logging) =>
-                {
-                    //add your logging
-                })
-                .UseIISIntegration()
-                .Configure(app =>
-                {
-                    app.UseOcelot().Wait();
-                })
+                //.ConfigureServices(s =>
+                //{
+                //    s.AddOcelot();
+                //})
+                //.ConfigureLogging((hostingContext, logging) =>
+                //{
+                //    //add your logging
+                //})
+                //.UseIISIntegration()
+                //.Configure(app =>
+                //{
+                //    app.UseOcelot().Wait();
+                //})
                 .Build()
                 .Run();
         }
