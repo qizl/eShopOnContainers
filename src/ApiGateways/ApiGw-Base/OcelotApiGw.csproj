@@ -10,6 +10,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Ocelot" Version="3.0.0" />
+    <PackageReference Include="Ocelot" Version="8.0.2" />
   </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties configuration_1json__JSONSchema="http://json.schemastore.org/appsettings" /></VisualStudio></ProjectExtensions>
 </Project>

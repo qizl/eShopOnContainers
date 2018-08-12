@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware;
 
 namespace OcelotApiGw
 {
@@ -10,17 +11,37 @@ namespace OcelotApiGw
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            CreateWebHostBuilder(args)
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    config
+                    .SetBasePath(hostingContext.HostingEnvironment.ContentRootPath)
+                    .AddJsonFile("appsettings.json", true, true)
+                    .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", true, true)
+                    .AddJsonFile("configuration.json", false, false)
+                    .AddEnvironmentVariables();
+                })
+                .ConfigureServices(s =>
+                {
+                    s.AddOcelot();
+                })
+                .ConfigureLogging((hostingContext, logging) =>
+                {
+                    //add your logging
+                })
+                .UseIISIntegration()
+                .Configure(app =>
+                {
+                    app.UseOcelot().Wait();
+                })
+                .Build()
+                .Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args)
-        {
-            IWebHostBuilder builder = WebHost.CreateDefaultBuilder(args);
-            builder.ConfigureServices(s => s.AddSingleton(builder))
-                .ConfigureAppConfiguration(ic => ic.AddJsonFile(Path.Combine("configuration", "configuration.json")))
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>();
-            IWebHost host = builder.Build();
-            return host;
-        }
     }
 }
