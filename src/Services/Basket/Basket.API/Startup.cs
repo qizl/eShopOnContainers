@@ -82,19 +82,15 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API
 
                 return ConnectionMultiplexer.Connect(configuration);
             });
-
-
-
+            
             if (Configuration.GetValue<bool>("AzureServiceBusEnabled"))
             {
                 services.AddSingleton<IServiceBusPersisterConnection>(sp =>
                 {
+                    var settings = sp.GetRequiredService<IOptions<BasketSettings>>().Value;
                     var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
 
-                    var settings = sp.GetRequiredService<IOptions<BasketSettings>>().Value;
-                    var serviceBusConnectionString = settings.GetEventBusConnection();
-
-                    var serviceBusConnection = new ServiceBusConnectionStringBuilder(serviceBusConnectionString);
+                    var serviceBusConnection = new ServiceBusConnectionStringBuilder(settings.GetEventBusConnection());
 
                     return new DefaultServiceBusPersisterConnection(serviceBusConnection, logger);
                 });
@@ -192,7 +188,6 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API
             {
                 app.UsePathBase(pathBase);
             }
-
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
             app.Map("/liveness", lapp => lapp.Run(async ctx => ctx.Response.StatusCode = 200));

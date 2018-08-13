@@ -1,12 +1,12 @@
 ﻿namespace Microsoft.eShopOnContainers.Services.Locations.API.Infrastructure.Repositories
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Microsoft.eShopOnContainers.Services.Locations.API.Model;
     using Microsoft.Extensions.Options;
     using MongoDB.Bson;
     using MongoDB.Driver;
     using MongoDB.Driver.GeoJsonObjectModel;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
     using ViewModel;
 
     public class LocationsRepository

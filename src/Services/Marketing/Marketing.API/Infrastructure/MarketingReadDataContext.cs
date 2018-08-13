@@ -10,7 +10,7 @@
 
         public MarketingReadDataContext(IOptions<MarketingSettings> settings)
         {
-            var client = new MongoClient(settings.Value.MongoConnectionString);
+            var client = new MongoClient(settings.Value.GetMongoConnectionString());
 
             if (client != null)
             {

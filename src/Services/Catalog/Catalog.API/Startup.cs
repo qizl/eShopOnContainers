@@ -54,7 +54,6 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API
             var container = new ContainerBuilder();
             container.Populate(services);
             return new AutofacServiceProvider(container.Build());
-
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -128,7 +127,12 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API
                 {
                     minutes = minutesParsed;
                 }
-                checks.AddSqlCheck("CatalogDb", configuration["ConnectionString"], TimeSpan.FromMinutes(minutes));
+#if QFDEBUG
+                var connectionString = configuration["QFConnectionString"];
+#else
+                var connectionString = configuration["ConnectionString"];
+#endif
+                checks.AddSqlCheck("CatalogDb", connectionString, TimeSpan.FromMinutes(minutes));
 
                 var accountName = configuration.GetValue<string>("AzureStorageAccountName");
                 var accountKey = configuration.GetValue<string>("AzureStorageAccountKey");
@@ -157,9 +161,15 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API
 
         public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
         {
+#if QFDEBUG
+            var connectionString = configuration["QFConnectionString"];
+#else
+            var connectionString = configuration["ConnectionString"];
+#endif
+
             services.AddDbContext<CatalogContext>(options =>
             {
-                options.UseSqlServer(configuration["ConnectionString"],
+                options.UseSqlServer(connectionString,
                                      sqlServerOptionsAction: sqlOptions =>
                                      {
                                          sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
@@ -175,7 +185,7 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API
 
             services.AddDbContext<IntegrationEventLogContext>(options =>
             {
-                options.UseSqlServer(configuration["ConnectionString"],
+                options.UseSqlServer(connectionString,
                                      sqlServerOptionsAction: sqlOptions =>
                                      {
                                          sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);

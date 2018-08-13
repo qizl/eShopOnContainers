@@ -36,9 +36,15 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API
         {
             RegisterAppInsights(services);
 
+#if QFDEBUG
+            var connectionString = Configuration["QFConnectionString"];
+#else
+            var connectionString = Configuration["ConnectionString"];
+#endif
+
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
-             options.UseSqlServer(Configuration["ConnectionString"],
+             options.UseSqlServer(connectionString,
                                      sqlServerOptionsAction: sqlOptions =>
                                      {
                                          sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
@@ -70,13 +76,12 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API
                 {
                     minutes = minutesParsed;
                 }
-                checks.AddSqlCheck("Identity_Db", Configuration["ConnectionString"], TimeSpan.FromMinutes(minutes));
+                checks.AddSqlCheck("Identity_Db", connectionString, TimeSpan.FromMinutes(minutes));
             });
 
             services.AddTransient<ILoginService<ApplicationUser>, EFLoginService>();
             services.AddTransient<IRedirectService, RedirectService>();
 
-            var connectionString = Configuration["ConnectionString"];
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             // Adds IdentityServer

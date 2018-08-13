@@ -10,7 +10,7 @@
 
         public LocationsContext(IOptions<LocationSettings> settings)
         {
-            var client = new MongoClient(settings.Value.ConnectionString);
+            var client = new MongoClient(settings.Value.GetConnectionString());
             if (client != null)
                 _database = client.GetDatabase(settings.Value.Database);
         }

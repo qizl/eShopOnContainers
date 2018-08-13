@@ -1,4 +1,8 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Threading.Tasks;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights.ServiceFabric;
@@ -20,12 +24,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.HealthChecks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using Swashbuckle.AspNetCore.Swagger;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Threading.Tasks;
 
 namespace Microsoft.eShopOnContainers.Services.Locations.API
 {
@@ -55,9 +56,10 @@ namespace Microsoft.eShopOnContainers.Services.Locations.API
             {
                 services.AddSingleton<IServiceBusPersisterConnection>(sp =>
                 {
+                    var settings = sp.GetRequiredService<IOptions<LocationSettings>>().Value;
                     var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
 
-                    var serviceBusConnectionString = Configuration["EventBusConnection"];
+                    var serviceBusConnectionString = settings.GetEventBusConnection();
                     var serviceBusConnection = new ServiceBusConnectionStringBuilder(serviceBusConnectionString);
 
                     return new DefaultServiceBusPersisterConnection(serviceBusConnection, logger);
@@ -67,11 +69,12 @@ namespace Microsoft.eShopOnContainers.Services.Locations.API
             {
                 services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
                 {
+                    var settings = sp.GetRequiredService<IOptions<LocationSettings>>().Value;
                     var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
 
                     var factory = new ConnectionFactory()
                     {
-                        HostName = Configuration["EventBusConnection"]
+                        HostName = settings.GetEventBusConnection()
                     };
 
                     if (!string.IsNullOrEmpty(Configuration["EventBusUserName"]))
@@ -105,7 +108,7 @@ namespace Microsoft.eShopOnContainers.Services.Locations.API
             services.AddSwaggerGen(options =>
             {
                 options.DescribeAllEnumsAsStrings();
-                options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
+                options.SwaggerDoc("v1", new Info
                 {
                     Title = "eShopOnContainers - Location HTTP API",
                     Version = "v1",

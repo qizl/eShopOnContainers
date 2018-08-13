@@ -28,6 +28,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.HealthChecks;
     using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
     using Ordering.Infrastructure;
     using RabbitMQ.Client;
     using Swashbuckle.AspNetCore.Swagger;
@@ -63,8 +64,14 @@
             var container = new ContainerBuilder();
             container.Populate(services);
 
+#if QFDEBUG
+            var connectionString = Configuration["QFConnectionString"];
+#else
+            var connectionString = Configuration["ConnectionString"];
+#endif
+
             container.RegisterModule(new MediatorModule());
-            container.RegisterModule(new ApplicationModule(Configuration["ConnectionString"]));
+            container.RegisterModule(new ApplicationModule(connectionString));
 
             return new AutofacServiceProvider(container.Build());
         }
@@ -173,6 +180,12 @@
 
         public static IServiceCollection AddHealthChecks(this IServiceCollection services, IConfiguration configuration)
         {
+#if QFDEBUG
+            var connectionString = configuration["QFConnectionString"];
+#else
+            var connectionString = configuration["ConnectionString"];
+#endif
+
             services.AddHealthChecks(checks =>
             {
                 var minutes = 1;
@@ -180,7 +193,7 @@
                 {
                     minutes = minutesParsed;
                 }
-                checks.AddSqlCheck("OrderingDb", configuration["ConnectionString"], TimeSpan.FromMinutes(minutes));
+                checks.AddSqlCheck("OrderingDb", connectionString, TimeSpan.FromMinutes(minutes));
             });
 
             return services;
@@ -188,10 +201,16 @@
 
         public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
         {
+#if QFDEBUG
+            var connectionString = configuration["QFConnectionString"];
+#else
+            var connectionString = configuration["ConnectionString"];
+#endif
+
             services.AddEntityFrameworkSqlServer()
                    .AddDbContext<OrderingContext>(options =>
                    {
-                       options.UseSqlServer(configuration["ConnectionString"],
+                       options.UseSqlServer(connectionString,
                            sqlServerOptionsAction: sqlOptions =>
                            {
                                sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
@@ -203,7 +222,7 @@
 
             services.AddDbContext<IntegrationEventLogContext>(options =>
             {
-                options.UseSqlServer(configuration["ConnectionString"],
+                options.UseSqlServer(connectionString,
                                      sqlServerOptionsAction: sqlOptions =>
                                      {
                                          sqlOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
@@ -259,10 +278,10 @@
             {
                 services.AddSingleton<IServiceBusPersisterConnection>(sp =>
                 {
+                    var settings = sp.GetRequiredService<IOptions<OrderingSettings>>().Value;
                     var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
 
-                    var serviceBusConnectionString = configuration["EventBusConnection"];
-                    var serviceBusConnection = new ServiceBusConnectionStringBuilder(serviceBusConnectionString);
+                    var serviceBusConnection = new ServiceBusConnectionStringBuilder(settings.GetEventBusConnection());
 
                     return new DefaultServiceBusPersisterConnection(serviceBusConnection, logger);
                 });
@@ -271,12 +290,12 @@
             {
                 services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
                 {
+                    var settings = sp.GetRequiredService<IOptions<OrderingSettings>>().Value;
                     var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
-
 
                     var factory = new ConnectionFactory()
                     {
-                        HostName = configuration["EventBusConnection"]
+                        HostName = settings.GetEventBusConnection()
                     };
 
                     if (!string.IsNullOrEmpty(configuration["EventBusUserName"]))
