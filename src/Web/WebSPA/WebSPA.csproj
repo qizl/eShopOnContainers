@@ -8,6 +8,7 @@
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <GeneratedItemPatterns>wwwroot/dist/**</GeneratedItemPatterns>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(GeneratedItemPatterns)</DefaultItemExcludes>
+    <Configurations>Debug;Release;QFDebug</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

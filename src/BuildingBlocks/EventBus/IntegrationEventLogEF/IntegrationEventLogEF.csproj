@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Microsoft.eShopOnContainers.BuildingBlocks.IntegrationEventLogEF</RootNamespace>
+    <Configurations>Debug;Release;QFDebug</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

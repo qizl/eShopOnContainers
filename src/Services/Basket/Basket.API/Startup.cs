@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Basket.API.Infrastructure.Filters;
 using Basket.API.Infrastructure.Middlewares;
@@ -31,6 +27,10 @@ using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Threading.Tasks;
 
 namespace Microsoft.eShopOnContainers.Services.Basket.API
 {
@@ -47,7 +47,7 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            RegisterAppInsights(services);            
+            RegisterAppInsights(services);
 
             // Add framework services.
             services.AddMvc(options =>
@@ -66,7 +66,7 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API
                                         );
             });
 
-            services.Configure<BasketSettings>(Configuration);            
+            services.Configure<BasketSettings>(Configuration);
 
             //By connecting here we are making sure that our service
             //cannot start until redis is ready. This might slow down startup,
@@ -92,6 +92,7 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API
                     var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
 
                     var serviceBusConnectionString = Configuration["EventBusConnection"];
+
                     var serviceBusConnection = new ServiceBusConnectionStringBuilder(serviceBusConnectionString);
 
                     return new DefaultServiceBusPersisterConnection(serviceBusConnection, logger);
@@ -175,7 +176,7 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API
 
             return new AutofacServiceProvider(container.Build());
         }
-    
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -194,7 +195,7 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API
             app.Map("/liveness", lapp => lapp.Run(async ctx => ctx.Response.StatusCode = 200));
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
 
-            app.UseStaticFiles();          
+            app.UseStaticFiles();
             app.UseCors("CorsPolicy");
 
             ConfigureAuth(app);
@@ -205,7 +206,7 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API
                .UseSwaggerUI(c =>
                {
                    c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty(pathBase) ? pathBase : string.Empty) }/swagger/v1/swagger.json", "Basket.API V1");
-                   c.OAuthClientId ("basketswaggerui");
+                   c.OAuthClientId("basketswaggerui");
                    c.OAuthAppName("Basket Swagger UI");
                });
 
@@ -217,7 +218,7 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API
         {
             services.AddApplicationInsightsTelemetry(Configuration);
             var orchestratorType = Configuration.GetValue<string>("OrchestratorType");
-            
+
             if (orchestratorType?.ToUpper() == "K8S")
             {
                 // Enable K8s telemetry initializer
@@ -236,8 +237,8 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API
             // prevent from mapping "sub" claim to nameidentifier.
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-            var identityUrl = Configuration.GetValue<string>("IdentityUrl"); 
-                
+            var identityUrl = Configuration.GetValue<string>("IdentityUrl");
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -272,7 +273,7 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API
                     var serviceBusPersisterConnection = sp.GetRequiredService<IServiceBusPersisterConnection>();
                     var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
                     var logger = sp.GetRequiredService<ILogger<EventBusServiceBus>>();
-                    var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();                    
+                    var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
                     return new EventBusServiceBus(serviceBusPersisterConnection, logger,
                         eventBusSubcriptionsManager, subscriptionClientName, iLifetimeScope);

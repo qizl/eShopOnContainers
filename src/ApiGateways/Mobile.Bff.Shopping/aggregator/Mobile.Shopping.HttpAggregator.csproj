@@ -5,6 +5,7 @@
     <AssemblyName>Mobile.Shopping.HttpAggregator</AssemblyName>
     <RootNamespace>Microsoft.eShopOnContainers.Mobile.Shopping.HttpAggregator</RootNamespace>
     <DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
+    <Configurations>Debug;Release;QFDebug</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
