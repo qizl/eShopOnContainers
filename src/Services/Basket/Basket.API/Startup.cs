@@ -36,13 +36,12 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
-
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -85,13 +84,15 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API
             });
 
 
+
             if (Configuration.GetValue<bool>("AzureServiceBusEnabled"))
             {
                 services.AddSingleton<IServiceBusPersisterConnection>(sp =>
                 {
                     var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
 
-                    var serviceBusConnectionString = Configuration["EventBusConnection"];
+                    var settings = sp.GetRequiredService<IOptions<BasketSettings>>().Value;
+                    var serviceBusConnectionString = settings.GetEventBusConnection();
 
                     var serviceBusConnection = new ServiceBusConnectionStringBuilder(serviceBusConnectionString);
 
@@ -104,9 +105,11 @@ namespace Microsoft.eShopOnContainers.Services.Basket.API
                 {
                     var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
 
+                    var settings = sp.GetRequiredService<IOptions<BasketSettings>>().Value;
+
                     var factory = new ConnectionFactory()
                     {
-                        HostName = Configuration["EventBusConnection"]
+                        HostName = settings.GetEventBusConnection()
                     };
 
                     if (!string.IsNullOrEmpty(Configuration["EventBusUserName"]))

@@ -243,7 +243,7 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API
                     var settings = sp.GetRequiredService<IOptions<CatalogSettings>>().Value;
                     var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
 
-                    var serviceBusConnection = new ServiceBusConnectionStringBuilder(settings.EventBusConnection);
+                    var serviceBusConnection = new ServiceBusConnectionStringBuilder(settings.GetEventBusConnection());
 
                     return new DefaultServiceBusPersisterConnection(serviceBusConnection, logger);
                 });
@@ -257,7 +257,7 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API
 
                     var factory = new ConnectionFactory()
                     {
-                        HostName = configuration["EventBusConnection"]
+                        HostName = settings.GetEventBusConnection()
                     };
 
                     if (!string.IsNullOrEmpty(configuration["EventBusUserName"]))
