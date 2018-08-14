@@ -23,7 +23,7 @@ namespace WebMVC.Services
             _settings = settings;
             _logger = logger;
 
-            _remoteServiceBaseUrl = $"{_settings.Value.MarketingUrl}/api/v1/l/locations/";
+            _remoteServiceBaseUrl = $"{_settings.Value.PurchaseUrl}/api/v1/l/locations/";
         }
 
         public async Task CreateOrUpdateUserLocation(LocationDTO location)

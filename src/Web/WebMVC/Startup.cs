@@ -231,8 +231,7 @@ namespace Microsoft.eShopOnContainers.WebMVC
             var identityUrl = configuration.GetValue<string>("IdentityUrl");
             var callBackUrl = configuration.GetValue<string>("CallBackUrl");
 
-            // Add Authentication services          
-
+            // Add Authentication services
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
