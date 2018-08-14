@@ -101,7 +101,7 @@
                     var settings = sp.GetRequiredService<IOptions<MarketingSettings>>().Value;
                     var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
 
-                    var serviceBusConnection = new ServiceBusConnectionStringBuilder(settings.EventBusConnection);
+                    var serviceBusConnection = new ServiceBusConnectionStringBuilder(settings.GetEventBusConnection());
 
                     return new DefaultServiceBusPersisterConnection(serviceBusConnection, logger);
                 });
@@ -115,7 +115,7 @@
 
                     var factory = new ConnectionFactory()
                     {
-                        HostName = settings.EventBusConnection
+                        HostName = settings.GetEventBusConnection()
                     };
 
                     if (!string.IsNullOrEmpty(Configuration["EventBusUserName"]))
@@ -142,7 +142,7 @@
             services.AddSwaggerGen(options =>
             {
                 options.DescribeAllEnumsAsStrings();
-                options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
+                options.SwaggerDoc("v1", new Info
                 {
                     Title = "Marketing HTTP API",
                     Version = "v1",
