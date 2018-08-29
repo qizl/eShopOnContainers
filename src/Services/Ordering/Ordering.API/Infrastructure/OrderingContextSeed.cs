@@ -1,12 +1,10 @@
 ﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Infrastructure
 {
-    using AspNetCore.Builder;
     using global::Ordering.API.Extensions;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
     using Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.OrderAggregate;
-    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using Ordering.Infrastructure;
