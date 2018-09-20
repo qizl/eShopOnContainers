@@ -37,11 +37,11 @@
         }
 
         public async Task<bool> AddOrUpdateUserLocation(string userId, LocationRequest currentPosition)
-        {            
+        {
             // Get the list of ordered regions the user currently is within
             var currentUserAreaLocationList = await _locationsRepository.GetCurrentUserRegionsListAsync(currentPosition);
-                      
-            if(currentUserAreaLocationList is null)
+
+            if (currentUserAreaLocationList is null)
             {
                 throw new LocationDomainException("User current area not found");
             }
@@ -72,7 +72,8 @@
         private List<UserLocationDetails> MapUserLocationDetails(List<Locations> newLocations)
         {
             var result = new List<UserLocationDetails>();
-            newLocations.ForEach(location => {
+            newLocations.ForEach(location =>
+            {
                 result.Add(new UserLocationDetails()
                 {
                     LocationId = location.LocationId,

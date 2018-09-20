@@ -51,7 +51,7 @@ namespace Locations.API.Controllers
             var location = await _locationsService.GetLocation(locationId);
             return Ok(location);
         }
-         
+
         //POST api/v1/[controller]/
         [Route("")]
         [HttpPost]
@@ -61,9 +61,9 @@ namespace Locations.API.Controllers
         {
             var userId = _identityService.GetUserIdentity();
             var result = await _locationsService.AddOrUpdateUserLocation(userId, newLocReq);
-           
-            return result ? 
-                (IActionResult)Ok() : 
+
+            return result ?
+                (IActionResult)Ok() :
                 (IActionResult)BadRequest();
         }
     }
